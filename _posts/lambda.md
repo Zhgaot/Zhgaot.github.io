@@ -1,0 +1,102 @@
+---
+layout:     post
+title:      KVO详解
+subtitle:   KVO底层原理及其实现
+date:       2021-03-29
+author:     BY
+header-img: img/post-bg-cook.jpg
+catalog: true
+tags:
+    - C++11
+---
+
+# Lambda
+
+> C++11引入Lambad，以允许定义一个inline的功能，Lambda表达式可以被用来作为一个参数或者一个对象；Lambda改变了我们使用C++标准库的使用方式（比如我们之前可以使用函数对象或仿函数来嵌入标准库中声明我们的排序方法，Lambda具有同样的功能）
+
+## 1 简单的Lambda
+
+```cpp
+// 下面的代码表示了一个Lambda表达式的**类型**：
+[] {
+	std::cout << "Hello world" << std::endl;
+}
+
+// 加入 “小括号()” 后，就可以直接调用Lambda表达式了，就像调用一个函数一样
+// 其实是：加入 “小括号()” 后产生了一个Lambda类型的会被直接调用的临时对象
+[] {
+	std::cout << "Hello world" << std::endl;
+}();  // *prints* "Hello world"
+
+// 也可以先指定一个Lambda行为(比如赋给l)，然后在后面就可以无限次的调用l了，就像调用函数一样
+auto l = [] {
+	std::cout << "Hello world" << std::endl;
+};  // 注意，这里不加“小括号()”
+...
+l();  // *prints* "Hello world"
+```
+
+## 2 Lambda表达式的完整形式
+
+---
+
+$[...]$ $(...)$ $mutable_{opt}$ $throwSpec_{opt}$ -> $retType_{opt}$ {$...$};
+
+---
+
+### 2.1 捕获列表$[...]$
+
+用于捕获外部值，可以使用：
+
+- pass by value: [=]
+- pass by reference: [&]
+
+```cpp
+int x = 0;
+int y = 42;
+auto z = [x, &y]{...};
+```
+
+### 2.2 形参列表$(...)$
+
+与函数相同的形参列表
+
+### 2.3 可选项(optional)
+
+以下三个均为可选项，可写可不写；但**三者只要有一个存在，前面的小括号(形参列表)必须要写**；如果三者均没有，则小括号也可以省略
+
+1. $mutable_{opt}$：表示 “捕获列表[...]” 内的数据是否能够被改写
+2. $throwSpec_{opt}$：一个函数是否可以抛出异常
+3. $retType_{opt}$：描述Lambda的返回类型
+
+### 2.4 函数体{$...$}
+
+与普通函数的函数体无异
+
+## 3 Lambda示例
+
+### 3.1 保存当前状态的lambda（我自己起的名字）
+
+![](img\C++-C++11\lambda 0.png)
+
+### 3.2 lambda可以等价于一个更方便的仿函数
+
+![](img\C++-C++11\lambda 1.png)
+
+### 3.3 【重要】lambda基本使用对比
+
+![](img\C++-C++11\lambda 2.png)
+
+## 4 lambda与标准库的使用
+
+### 4.1 lambda的类型与标准库的使用
+
+lambda的类型是一个匿名函数对象的类型，并且它对于每一个lambda来说都是独一无二的。因此，如果要宣告一个这种lambda类型的对象的话，可以使用templates或auto；**如果你非要它的类型，可以使用decltype()**，例如，你需要传入一个lambda当作hash函数，或者将其当作一个排序准则去传给一个不定序的容器（比如unordered_set）。
+
+![](img\C++-C++11\lambda 3.png)
+
+对于上面这个例子：由于你需要lambda的类型用于声明set的时候所需（因为set的接口设计要求传入一个比大小的函数），因此必须使用decltype，它可以将lambda的类型拿到。同时，你也必须要将lambda函数传入set中，否则的话，set容器会调用默认构造函数，默认构造函数则会调用你所传入的lambda的默认构造函数，但是lambda并没有默认构造函数，也没有赋值操作，则会编译失败！因此建议：在写排序准则的时候，写成一个正规的class会更好一些。
+
+### 4.2 lambda与容器的常用使用
+
+![](img\C++-C++11\lambda 4.png)

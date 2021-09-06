@@ -28,10 +28,10 @@ tags:
 2. 之后，调用函数（例如ctor）时该`array`内的元素可被编译器分解并逐一地传给该函数；
 3. 当然，如果该函数的参数本身就是`initializer_list<T>`，调用者就不能给予数个T参数然后以为它们会被自动转换为一个`initializer_list<T>`而传入；
 
-![Untitled](Uniform%20Initialization%20febda4b63183442b8c8a0ec3abc3714e/Untitled.png)
+![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++-C++11/UI_0.png)
 
 对于所有容器而言，它们都有一个ctor是可以直接接受`initializer_list<T>`参数的版本，而自己写的类不一定有这个版本，那么编译器就会自动将`initializer_list<T>`内的参数一个一个传入。
 
 ### 4 Uniform Initialization使用小tips
 
-![Untitled](Uniform%20Initialization%20febda4b63183442b8c8a0ec3abc3714e/Untitled%201.png)
+![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++-C++11/UI_1.png)

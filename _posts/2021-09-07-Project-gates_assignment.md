@@ -4,7 +4,7 @@ title:      科研项目 —— 民航停机位分配
 subtitle:   科研项目 —— 动态禁忌搜索求解民航停机位分配问题
 date:       2021-09-7
 author:     Zhgaot
-header-img: img/Project/gate_ass/airplane.jpg
+header-img: img/Project/gates_ass/airplane.jpg
 catalog: true
 tags:
     - Project

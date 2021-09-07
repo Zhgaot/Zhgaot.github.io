@@ -11,6 +11,7 @@ tags:
 ---
 
 > 文章参考：侯捷-C++11新特性
+> 下篇文章：[initializer_list](https://zhgaot.github.io/2021/09/05/C++11-initializer_list/)
 
 ### 1 出现原因
 

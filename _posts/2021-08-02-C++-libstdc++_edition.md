@@ -15,10 +15,10 @@ tags:
 腾讯引力计划mini项目中计划使用组内的Bon协议来作为信息的载体。从git上拉下来Bon了C++源码及其提供的demo，对demo进行编译后，出现如下报错：
 ```bash
 [命令]./bon_demo
-[报错]./bon_demo: /lib64/libstdc++.so.6: version `CXXABI_1.3.9' not found (required by ./bon_demo) `
+[报错]./bon_demo: /lib64/libstdc++.so.6: version 'CXXABI_1.3.9' not found (required by ./bon_demo)
 [命令]./server_demo_bon
-[报错]./server_demo_bon: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.21' not found (required by ./server_demo_bon) `
-[报错]./server_demo_bon: /lib64/libstdc++.so.6: version `CXXABI_1.3.9' not found (required by ./server_demo_bon)
+[报错]./server_demo_bon: /lib64/libstdc++.so.6: version 'GLIBCXX_3.4.21' not found (required by ./server_demo_bon) 
+[报错]./server_demo_bon: /lib64/libstdc++.so.6: version 'CXXABI_1.3.9' not found (required by ./server_demo_bon)
 ```
 
 #### 1.2 报错原因

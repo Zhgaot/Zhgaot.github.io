@@ -29,46 +29,38 @@ tags:
 #### 1.1.1 输入变量
 
 ![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/Project/gates_ass/table_1.png)
-<!-- <img src="E:\GitHub\Zhgaot.github.io\img\Project\gates_ass\table_1.png" style="zoom: 80%;" /> -->
 
 #### 1.1.2 决策变量
 
 ![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/Project/gates_ass/table_2.png)
-<!-- <img src="E:\GitHub\Zhgaot.github.io\img\Project\gates_ass\table_2.png" style="zoom: 50%;" /> -->
 
 ### 1.2 优化目标及目标函数
 
 #### 1.2.1 最小化停机位空间浪费率
 停机位的大小要与所停放的飞机机型相匹配，在此暂将机型类比为飞机的大小，即：大型机只能停放在大型停机位，小型机可以停放在大型停机位或小型停机位，但优先为其分配小型停机位。因为机型与停机位不匹配会导致停机位资源的浪费，故为减小这种浪费，将“最小化停机位空间浪费率”作为优化目标之一，它可以表示为：
 ![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/Project/gates_ass/format_1.png)
-<!-- <img src="E:\GitHub\Zhgaot.github.io\img\Project\gates_ass\format_1.png" style="zoom:50%;" /> -->
 
 #### 1.2.2 最小化停机位空闲时间——等价于最小化停机位使用数目
 在停机位分配过程中，为了尽可能地节省机场空间，增大机场对飞机的容纳程度，应最小化机场停机位的使用数目，它等价于：对每个已参与分配的停机位，最小化空闲时间，使其能尽可能地在一个时间段内多停放飞机。因此，将“最小化停机位空闲时间”作为优化目标之一，它可以表示为：
 ![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/Project/gates_ass/format_2.png)
-<!-- <img src="E:\GitHub\Zhgaot.github.io\img\Project\gates_ass\format_2.png" style="zoom:50%;" /> -->
 
 #### 1.2.3 最小化航班在起降跑道至停机位来回路程上的耗能
 在飞机对机场的起、降、停行为中，当飞机降落后被分配至某一停机位时，飞机需要从起降跑道移动至停机位，当飞机准备起飞时，飞机需要从停机位移动至起降跑道；同时，飞机的进出方式分为自由/顺序(全发)滑行及顶推(牵引)滑行，它们消耗的能量具有显著差别。为了尽可能地减少飞机在地面上损耗的能量，将“最小化航班在起降跑道至停机位来回路程上的耗能”作为优化目标之一，它可以表示为：
 ![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/Project/gates_ass/format_3.png)
-<!-- <img src="E:\GitHub\Zhgaot.github.io\img\Project\gates_ass\format_3.png" style="zoom:50%;" /> -->
 
 #### 1.2.4 最小化停机位距航站楼的路程
 在某些特殊情况（如战时），为使乘客或货物尽快安置在飞机上，提高乘客及货物的安全性，应减少停机位距航站楼的路程，故将此作为优化目标之一，具体可表示为：
 ![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/Project/gates_ass/format_4.png)
-<!-- <img src="E:\GitHub\Zhgaot.github.io\img\Project\gates_ass\format_4.png" style="zoom:50%;" /> -->
 
 #### 1.2.5 目标函数
 综合考虑上述4方面的优化目标，建立同时包含4方面因素的目标函数：
 ![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/Project/gates_ass/format_5.png)
-<!-- <img src="E:\GitHub\Zhgaot.github.io\img\Project\gates_ass\format_5.png" style="zoom:50%;" /> -->
 
 **【注意】当前代码中的目标函数仅考虑了 *f1* 和 *f2* 两项优化目标。**
 
 ### 1.3 约束条件
 停机位分配模型的约束条件如下：
 ![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/Project/gates_ass/format_8.png)
-<!-- <img src="E:\GitHub\Zhgaot.github.io\img\Project\gates_ass\format_8.png" style="zoom: 50%;" /> -->
 1. 每趟航班只能且必须分配一个机场停机位；
 2. 同一停机位在同一时刻只能停放一架飞机；
 3. 停机位大小与机型的约束，其中最右侧参数为一个任意大的正数，所有停机位只可停放与其相匹配或小于其大小的机型，即所有停机位只可向下兼容；

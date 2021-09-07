@@ -7,6 +7,7 @@ author:     Zhgaot
 header-img: img/C++-C++11/C++_cover.png
 catalog: true
 tags:
+    - C++
     - C++11
 ---
 

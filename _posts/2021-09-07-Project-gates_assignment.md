@@ -4,10 +4,10 @@ title:      科研项目 —— 民航停机位分配
 subtitle:   科研项目 —— 动态禁忌搜索求解民航停机位分配问题
 date:       2021-09-7
 author:     Zhgaot
-header-img: img/C++-C++11/C++_cover.png
+header-img: img/Project/airplane.jpg
 catalog: true
 tags:
-    - C++11
+    - Project
 ---
 
 > 导语：本篇博客将分享求解民航停机位分配问题的一种方法
@@ -15,6 +15,8 @@ tags:
 > 问题：民航静态停机位分配问题
 >
 > 算法：动态禁忌搜索算法求解民航停机位分配问题
+>
+> 语言：python
 >
 > ------
 >

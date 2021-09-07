@@ -4,7 +4,7 @@ title:      Uniform Initialization
 subtitle:   C++11 - 一致性初始化{}
 date:       2021-09-5
 author:     Zhgaot
-header-img: img/C++-C++11/C++_cover.png
+header-img: img/C++/C++_cover.png
 catalog: true
 tags:
     - C++

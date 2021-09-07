@@ -4,7 +4,7 @@ title:      initializer_list
 subtitle:   C++11 - initializer_list
 date:       2021-09-5
 author:     Zhgaot
-header-img: img/C++-C++11/C++_cover.png
+header-img: img/C++/C++_cover.png
 catalog: true
 tags:
 	- C++

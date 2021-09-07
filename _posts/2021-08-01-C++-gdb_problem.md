@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      gdb：No symbol table is loaded
-subtitle:   gdb无法使用(No symbol table is loaded)原因总结
+subtitle:   gdb使用报错(No symbol table is loaded)原因总结
 date:       2021-08-1
 author:     Zhgaot
 header-img: img/C++/C++_cover.png

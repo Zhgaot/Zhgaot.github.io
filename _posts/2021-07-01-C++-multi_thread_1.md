@@ -165,7 +165,7 @@ tags:
 
     上述代码运行结果：
 
-    ![%E7%BA%BF%E7%A8%8B%E5%90%AF%E5%8A%A8%E4%B8%8E%E7%BB%93%E6%9D%9F%E3%80%81%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%9Ajoin%E4%B8%8Edetach%20a05b6bdfa7cc4910a08bb359e4cb82d8/Untitled.png](%E7%BA%BF%E7%A8%8B%E5%90%AF%E5%8A%A8%E4%B8%8E%E7%BB%93%E6%9D%9F%E3%80%81%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%9Ajoin%E4%B8%8Edetach%20a05b6bdfa7cc4910a08bb359e4cb82d8/Untitled.png)
+    ![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++/multi-thread/1_0.png)
 
 ## 2.2 用lambda表达式创建线程
 

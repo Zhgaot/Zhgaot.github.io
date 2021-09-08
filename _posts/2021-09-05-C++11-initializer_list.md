@@ -17,7 +17,7 @@ tags:
 
 #### 1.1 函数参数可以为initializer_list
 
-![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++-C++11/initializer_list_0.png)
+![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++/C++-C++11/initializer_list_0.png)
 
 #### 1.2 函数调用实验
 
@@ -77,11 +77,11 @@ tags:
 2. 但`initializer_list`**内部并无深拷贝的拷贝函数重载，因此它会进行浅拷贝**，需注意！
 3. 编译器在看到{}时会自动创建一个`std::array`类型的对象，然后会将`std::array`类型的对象传入`initializer_list`的private的构造函数里，让`initializer_list`内部的指针`_M_array_`指向此array，并将内部的`_M_len`设定为此array的长度；
 
-![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++-C++11/initializer_list_1.png)
+![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++/C++-C++11/initializer_list_1.png)
 
 #### 2.2 相关的std::array源码示例
 
-![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++-C++11/initializer_list_2.png)
+![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++/C++-C++11/initializer_list_2.png)
 
 ## 3 initializer_list在std中的使用
 
@@ -91,4 +91,4 @@ tags:
 
 **关于max()和min()，它们之前只接受两个参数比较大小，现在如果使用{}的话可以接受任意数量的参数比较大小了！**
 
-![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++-C++11/initializer_list_4.png)
+![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++/C++-C++11/initializer_list_4.png)

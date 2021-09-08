@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      C++11线程库使用（二）
-subtitle:   detach与线程传参、成员函数做线程函数
+subtitle:   detach与线程传参 & 成员函数做线程函数
 date:       2021-07-2
 author:     Zhgaot
 header-img: img/C++/C++_cover.png

@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      C++11线程库使用（一）
-subtitle:   线程创建与结束、join与detach
+subtitle:   线程创建与结束 & join与detach
 date:       2021-07-1
 author:     Zhgaot
 header-img: img/C++/C++_cover.png

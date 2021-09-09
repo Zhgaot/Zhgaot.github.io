@@ -112,7 +112,7 @@ tags:
     	void inMsg() {
     		for (int i = 0; i < 10000; i++) {
     			cout << "inMsg()执行，插入一个元素：" << i << endl;
-    			**std::lock_guard<mutex> myGuard(myMutex);  // 【上锁+解锁】**
+    			std::lock_guard<mutex> myGuard(myMutex);  // 【上锁+解锁】
     			msg.push(i);  // 假设数字i就是收到的玩家命令
     		}
     	}
@@ -120,7 +120,7 @@ tags:
     	// 判断共享数据(缓冲区)是否为空，若不为空则修改数据
     	bool outMsgLULProc(int& command) {
     		if (!msg.empty()) {
-    			**std::lock_guard<mutex> myGuard(myMutex);  // 【上锁+解锁】**
+    			std::lock_guard<mutex> myGuard(myMutex);  // 【上锁+解锁】
     			command = msg.front();  // 返回第一个元素
     			msg.pop();  // 移除第一个元素但不返回
     			return true;
@@ -168,10 +168,10 @@ tags:
     void inMsg() {
     		for (int i = 0; i < 10000; i++) {
     			cout << "inMsg()执行，插入一个元素：" << i << endl;
-    			**{**
+    			{
     				std::lock_guard<mutex> myGuard(myMutex);  // 【上锁+解锁】
     				msg.push(i);  // 假设数字i就是收到的玩家命令
-    			**}**
+    			}
     		}
     	}
     ```
@@ -309,8 +309,8 @@ public:
 		for (int i = 0; i < 10000; i++) {
 			cout << "inMsg()执行，插入一个元素：" << i << endl;
 			lock(myMutex1, myMutex2);
-			lock_guard<mutex> myGuard1(myMutex1, **adopt_lock**);
-			lock_guard<mutex> myGuard2(myMutex2, **adopt_lock**);
+			lock_guard<mutex> myGuard1(myMutex1, adopt_lock);
+			lock_guard<mutex> myGuard2(myMutex2, adopt_lock);
 			msg.push(i);  // 假设数字i就是收到的玩家命令
 			//myMutex2.unlock();
 			//myMutex1.unlock();
@@ -321,8 +321,8 @@ public:
 	bool outMsgLULProc(int& command) {
 		if (!msg.empty()) {
 			lock(myMutex1, myMutex2);
-			lock_guard<mutex> myGuard1(myMutex1, **adopt_lock**);
-			lock_guard<mutex> myGuard2(myMutex2, **adopt_lock**);
+			lock_guard<mutex> myGuard1(myMutex1, adopt_lock);
+			lock_guard<mutex> myGuard2(myMutex2, adopt_lock);
 			command = msg.front();  // 返回第一个元素
 			msg.pop();  // 移除第一个元素但不返回
 			//myMutex1.unlock();

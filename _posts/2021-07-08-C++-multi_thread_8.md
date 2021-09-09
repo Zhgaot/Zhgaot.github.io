@@ -29,7 +29,7 @@ tags:
     #include <thread>
     #include <mutex>
     #include <iostream>
-    **#include <future>  // 使用future需要导入future库**
+    #include <future>  // 使用future需要导入future库
     using namespace std;
 
     int myThread(const int& num) {
@@ -43,9 +43,9 @@ tags:
     int main() {
     	cout << "主线程开始执行，线程id = " << std::this_thread::get_id() << endl;
     	int num = 5;
-    	**std::future<int> result = std::async(myThread, num);  // 流程并不会卡在这里！！！**
+    	std::future<int> result = std::async(myThread, num);  // 流程并不会卡在这里！！！
     	cout << "continue......" << endl;  // 程序将继续执行后序代码
-    	**cout << result.get() << endl;**  // 程序将卡在这里等待myThread执行完毕，直到拿到结果，因此一定要保证子线程必须返回值，否则将永远卡死在这里
+    	cout << result.get() << endl;  // 程序将卡在这里等待myThread执行完毕，直到拿到结果，因此一定要保证子线程必须返回值，否则将永远卡死在这里
     	/*cout << result.get() << endl;*/  // 第二次调用.get()成员函数将报错
       result.wait();  // 等待线程返回，但本身并不返回结果
     	cout << "主线程执行结束" << endl;
@@ -77,9 +77,9 @@ tags:
     	cout << "主线程开始执行，线程id = " << std::this_thread::get_id() << endl;
     	int num = 5;
     	MyThreadClass myThreadObj;
-    	**std::future<int> result = std::async(&MyThreadClass::myThread, ref(myThreadObj), num);  // 流程并不会卡在这里！！！**
+    	std::future<int> result = std::async(&MyThreadClass::myThread, ref(myThreadObj), num);  // 流程并不会卡在这里！！！
     	cout << "continue......" << endl;
-    	**cout << result.get() << endl;**  // 程序将卡在这里等待myThread执行完毕，直到拿到结果，因此一定要保证子线程必须返回值，否则将永远卡死在这里
+    	cout << result.get() << endl;  // 程序将卡在这里等待myThread执行完毕，直到拿到结果，因此一定要保证子线程必须返回值，否则将永远卡死在这里
     	cout << "主线程执行结束" << endl;
     	return 0;
     }
@@ -129,10 +129,10 @@ tags:
 
     int main() {
     	cout << "主线程开始执行，线程id = " << std::this_thread::get_id() << endl;
-    	**std::packaged_task<int(int)> mypt(myThread);  // 我们把函数myThread通过packaged_task包装起来**
-    	**std::thread mythreadObj(ref(mypt), 10);  // 创建线程并开始执行**
+    	std::packaged_task<int(int)> mypt(myThread);  // 我们把函数myThread通过packaged_task包装起来
+    	std::thread mythreadObj(ref(mypt), 10);  // 创建线程并开始执行
     	mythreadObj.join();
-    	**std::future<int> result = mypt.get_future();  // 使用packaged_task包装后就有了get_future()接口，即可以获得future对象**
+    	std::future<int> result = mypt.get_future();  // 使用packaged_task包装后就有了get_future()接口，即可以获得future对象
     	cout << result.get() << endl;
     	cout << "主线程执行结束" << endl;
     	return 0;
@@ -144,13 +144,13 @@ tags:
     ```cpp
     int main() {
     	cout << "主线程开始执行，线程id = " << std::this_thread::get_id() << endl;
-    	std::packaged_task<int(int)> mypt(**[](int num) {
+    	std::packaged_task<int(int)> mypt([](int num) {
     		cout << "myThread()函数【开始执行】，" << "线程id = " << std::this_thread::get_id() << endl;  // 打印子线程id
     		std::chrono::milliseconds dura(5000);  // 假装子线程内的代码需要执行5秒
     		std::this_thread::sleep_for(dura);
     		cout << "myThread()函数【结束执行】，" << "线程id = " << std::this_thread::get_id() << endl;  // 打印子线程id
     		return num + 5;
-    		}**);  **// 我们把lambda表达式通过packaged_task包装起来**
+    		});  // 我们把lambda表达式通过packaged_task包装起来
     	std::thread mythreadObj(ref(mypt), 10);  // 创建线程并开始执行
     	mythreadObj.join();
     	std::future<int> result = mypt.get_future();  // 使用packaged_task包装后就有了get_future()接口，即可以获得future对象
@@ -187,12 +187,12 @@ void myThread2(std::future<int>& myFuture) {
 
 int main() {
 	/* promise能够在某个线程中被赋值，然后可以在其他线程中把这个值取出来用 */
-	**std::promise<int> myProm;  // 声明一个promise对象，保存的值的类型为int型**
-	**thread myThreadObj1(myThread1, ref(myProm), 100);**
+	std::promise<int> myProm;  // 声明一个promise对象，保存的值的类型为int型
+	thread myThreadObj1(myThread1, ref(myProm), 100);
 	myThreadObj1.join();
 	/* 获取结果值 */
-	**future<int> myFuture = myProm.get_future();  // promise对象与future对象绑定，可以获取线程的返回值**
-	**thread myThreadObj2(myThread2, ref(myFuture));**
+	future<int> myFuture = myProm.get_future();  // promise对象与future对象绑定，可以获取线程的返回值
+	thread myThreadObj2(myThread2, ref(myFuture));
 	myThreadObj2.join();
 	return 0;
 }

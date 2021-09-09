@@ -59,7 +59,7 @@ class A {
 private:
 	queue<int> msgQueue;
 	mutex myMutex;
-	**condition_variable myCondition;  // 生成一个条件变量对象**
+	condition_variable myCondition;  // 生成一个条件变量对象
 public:
 	// 把收到的消息传入队列中
 	void inMsg() {
@@ -67,7 +67,7 @@ public:
 			unique_lock<mutex> myUniqueLock(myMutex);
 			cout << "inMsg()执行，插入一个元素：" << i << endl;
 			msgQueue.push(i);
-			**myCondition.notify_one();  // 尝试把wait线程唤醒**
+			myCondition.notify_one();  // 尝试把wait线程唤醒
 		}
 	}
 
@@ -81,12 +81,12 @@ public:
 			 * 直到其他某个线程调用notify_one()成员函数为止；
 			 * 如果wait()没有第二个参数，则默认第二个参数直接返回false； 
 			 */
-			**myCondition.wait(myUniqueLock, [this] {  // lambda表达式就是可调用对象
+			myCondition.wait(myUniqueLock, [this] {  // lambda表达式就是可调用对象
 				if (!msgQueue.empty())
 					return true;
 				return false;
 				}
-			);**
+			);
 			command = msgQueue.front();  // 取出第一个元素给到command
 			msgQueue.pop();  // 移除第一个元素
 			myUniqueLock.unlock();  // 由于使用的是unique_lock，因此可以提前解锁，让其他线程继续执行

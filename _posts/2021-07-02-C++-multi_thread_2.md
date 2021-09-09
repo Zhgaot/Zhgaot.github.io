@@ -93,7 +93,7 @@ int main() {
         int mvar = 1;
         int& mvary = mvar;  // mvary用于对比传入线程的mvar的地址
         char buf[] = "This is a test!";
-        thread myobj(myPrint, mvar, **string(buf)**);  **// 构造临时对象并传入子线程**
+        thread myobj(myPrint, mvar, string(buf));  // 构造临时对象并传入子线程
         myobj.detach();
         cout << "主线程即将结束..." << endl;
         return 0;
@@ -152,7 +152,7 @@ int main() {
     int main() {
         int m = 1;
         int n = 1;
-        thread myobj(printAdds, **A(n)**);  // 构造临时对象传入子线程
+        thread myobj(printAdds, A(n));  // 构造临时对象传入子线程
         myobj.detach();
         cout << "主线程即将结束..." << endl;
         return 0;
@@ -227,7 +227,7 @@ int main() {
         cout << "主线程id为：" << std::this_thread::get_id() << endl;
         int m = 1;
         int n = 1;
-        thread myobj(printAdds, **A(n)**);  **// 传入的是临时对象**
+        thread myobj(printAdds, A(n));  // 传入的是临时对象
         myobj.join();
         return 0;
     }
@@ -260,7 +260,7 @@ void printAdds(A& a) {  // 这里不再需要加const关键字
 int main() {
     A a(100);
     cout << "传入子线程前对象a中的：_i = " << a._i << endl;
-    thread myobj(printAdds, **std::ref(a)**);  // 直接向子线程传入已在主线程构造好的对象a，希望子线程能够修改并影响主线程
+    thread myobj(printAdds, std::ref(a));  // 直接向子线程传入已在主线程构造好的对象a，希望子线程能够修改并影响主线程
     myobj.join();
     cout << "传入子线程后对象a中的：_i = " << a._i << endl;
     /*cout << "主线程即将结束..." << endl;*/
@@ -286,7 +286,7 @@ public:
 
 int main() {
     A a;
-    thread myobj(**&A::threadEntry**, a, 100);  // 类的成员函数只有一份，因此地址固定
+    thread myobj(&A::threadEntry, a, 100);  // 类的成员函数只有一份，因此地址固定
     myobj.join();  // 由于没有使用std::ref，因此用join和detach均可，否则只能使用join
     cout << "主线程即将结束..." << endl;
     return 0;

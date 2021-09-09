@@ -84,9 +84,9 @@ int main() {
          * 然后都进入if代码段内，都创建出单例类的对象，这样就不符合单例类的初衷了，
          * 因此，需要将下述代码加锁
         **/
-    		**if (m_instance == nullptr) {
+    		if (m_instance == nullptr) {
     			m_instance = new MyCAS();
-    		}**
+    		}
     		return m_instance;
     	}
     	void func() {
@@ -99,7 +99,7 @@ int main() {
     /* 线程入口函数 */
     void myThread() {
     	cout << "我的线程开始执行了..." << endl;
-    	**MyCAS* p_a = MyCAS::getInstance();  // 这里会因为线程异步，而创建出多个单例类的对象**
+    	MyCAS* p_a = MyCAS::getInstance();  // 这里会因为线程异步，而创建出多个单例类的对象
     	cout << "我的线程执行完毕了..." << endl;
     }
 
@@ -108,8 +108,8 @@ int main() {
     	 * 虽然下面两个线程用了同一个入口函数，但这是创建了两个线程，不要混淆！
     	 * 因此，这里会有两个线程并发地执行入口函数
     	**/
-    	**thread thread1(myThread);**
-    	**thread thread2(myThread);**
+    	thread thread1(myThread);
+    	thread thread2(myThread);
     	thread1.join();
     	thread2.join();
     }
@@ -126,7 +126,7 @@ int main() {
          * 然后都进入if代码段内，都创建出单例类的对象，这样就不符合单例类的初衷了，
          * 因此，需要将下述代码加锁
         **/
-    		**unique_lock<mutex> myUniqueLock(myMutex);  // 【上锁+函数结束后解锁】**
+    		unique_lock<mutex> myUniqueLock(myMutex);  // 【上锁+函数结束后解锁】
     		if (m_instance == nullptr) {
     			m_instance = new MyCAS();
     		}
@@ -149,7 +149,7 @@ int main() {
     		 * 2. 如果：if (m_instance == nullptr) 条件成立，不代表m_instance一定没被new过，单例类的对象不一定没被创建，
     		 *    比如说：可能已经被thread1创建了，只不过在thread1创建之前，thread2也通过了if (m_instance == nullptr)的判断
     		*/
-    		**if (m_instance == nullptr)** {  // 【双重检查】
+    		if (m_instance == nullptr) {  // 【双重检查】
     			unique_lock<mutex> myUniqueLock(myMutex);
     			if (m_instance == nullptr) {
     				m_instance = new MyCAS();
@@ -179,7 +179,7 @@ int main() {
 
 ```cpp
 mutex myMutex;
-**std::once_flag flag;  // 在全局定义一个结构体flag，因为类内必须定义静态变量，但又无法初始化**
+std::once_flag flag;  // 在全局定义一个结构体flag，因为类内必须定义静态变量，但又无法初始化
 
 /* 单例类 */
 class MyCAS {
@@ -198,7 +198,7 @@ private:
 	//static std::once_flag flag;  // 标记
 public:
 	static MyCAS* getInstance() {
-		**std::call_once(flag, createInstance);**
+		std::call_once(flag, createInstance);
 		return m_instance;
 	}
 	void func() {

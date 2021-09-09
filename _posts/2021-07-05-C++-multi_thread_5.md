@@ -24,7 +24,7 @@ public:
 	// 把收到的玩家命令入到队列中
 	void inMsg() {
 		for (int i = 0; i < 10000; i++) {
-     std::**unique_lock**<mutex> myGuard(myMutex);  // 【上锁+解锁】
+     std::unique_lock<mutex> myGuard(myMutex);  // 【上锁+解锁】
      cout << "inMsg()执行，插入一个元素：" << i << endl;
      msg.push(i);  // 假设数字i就是收到的玩家命令
 		}
@@ -33,7 +33,7 @@ public:
 	// 判断共享数据(缓冲区)是否为空，若不为空则修改数据
 	bool outMsgLULProc(int& command) {
 		if (!msg.empty()) {
-			std::**unique_lock**<mutex> myGuard(myMutex);  // 【上锁+解锁】
+			std::unique_lock<mutex> myGuard(myMutex);  // 【上锁+解锁】
 			command = msg.front();  // 返回第一个元素
 			msg.pop();  // 移除第一个元素但不返回
 			return true;
@@ -89,8 +89,8 @@ public:
 	// 把收到的玩家命令入到队列中
 	void inMsg() {
 		for (int i = 0; i < 10000; i++) {
-			**std::unique_lock<mutex> myGuard(myMutex, try_to_lock);  // 【尝试上锁+解锁】**
-			if (**myGuard.owns_lock()**) {  // 【尝试拿锁：拿到了锁】
+			std::unique_lock<mutex> myGuard(myMutex, try_to_lock);  // 【尝试上锁+解锁】
+			if (myGuard.owns_lock()) {  // 【尝试拿锁：拿到了锁】
 				cout << "inMsg()执行，插入一个元素：" << i << endl;
 				msg.push(i);  // 假设数字i就是收到的玩家命令
 			}
@@ -103,7 +103,7 @@ public:
 	// 判断共享数据(缓冲区)是否为空，若不为空则修改数据
 	bool outMsgLULProc(int& command) {
 		if (!msg.empty()) {
-			**std::unique_lock<mutex> myGuard(myMutex);  // 【上锁+解锁】**
+			std::unique_lock<mutex> myGuard(myMutex);  // 【上锁+解锁】
 			std::chrono::milliseconds duar(5000);  // 锁定5秒
 			std::this_thread::sleep_for(duar);  // 锁定5秒
 			command = msg.front();  // 返回第一个元素
@@ -180,8 +180,8 @@ int main() {
 // 把收到的玩家命令入到队列中
 	void inMsg() {
 		for (int i = 0; i < 10000; i++) {
-			**std::unique_lock<mutex> myGuard(myMutex, defer_lock);**  // 【初始化了一个未上锁的myMutex】
-			if (**myGuard.try_lock() == true**) {  // 【尝试上锁且成功】
+			std::unique_lock<mutex> myGuard(myMutex, defer_lock); // 【初始化了一个未上锁的myMutex】
+			if (myGuard.try_lock() == true) {  // 【尝试上锁且成功】
 				cout << "inMsg()执行，插入一个元素：" << i << endl;
 				msg.push(i);  // 假设数字i就是收到的玩家命令
 			}
@@ -202,11 +202,11 @@ int main() {
 // 把收到的玩家命令入到队列中
 	void inMsg() {
 		for (int i = 0; i < 10000; i++) {
-			**std::unique_lock<mutex> myGuard(myMutex);  // myGuard与myMutex二者已绑定**
-			**std::mutex *pMyMutex = myGuard.release();  // myGuard与myMutex的关系已解除**
+			std::unique_lock<mutex> myGuard(myMutex);  // myGuard与myMutex二者已绑定
+			std::mutex *pMyMutex = myGuard.release();  // myGuard与myMutex的关系已解除
 			cout << "inMsg()执行，插入一个元素：" << i << endl;
 			msg.push(i);  // 假设数字i就是收到的玩家命令
-			**pMyMutex->unlock();  // 由于指针pMyMutex已接管了myMutex，因此有责任将其unlock**
+			pMyMutex->unlock();  // 由于指针pMyMutex已接管了myMutex，因此有责任将其unlock
 		}
 	}
 ```

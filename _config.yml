@@ -1,10 +1,10 @@
 # Site settings
-title: ZHGAOT Blog
-SEOTitle: 张高兴的博客 | ZHGAOT Blog
+title: ZHGAOT's Blog
+SEOTitle: 张高兴的博客 | ZHGAOT's Blog
 header-img: img/post-bg-desk.jpg
 email: mike.zhgaot@gmail.com
 description: "The way of rookie growth."
-keyword: "ZHGAOT, ZHGAOT Blog, 张高兴的博客, 张高兴, mike, C++"
+keyword: "ZHGAOT, ZHGAOT's Blog, 张高兴的博客, 张高兴, mike, C++"
 url: "https://Zhgaot.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/Zhgaot/Zhgaot.github.io.git" # you code repository

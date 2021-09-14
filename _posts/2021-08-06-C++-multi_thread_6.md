@@ -2,7 +2,7 @@
 layout:     post
 title:      C++11线程库使用（六）
 subtitle:   单例设计模式共享数据问题分析及解决 & call_once
-date:       2021-07-6
+date:       2021-08-6
 author:     Zhgaot
 header-img: img/C++/C++_cover.png
 catalog: true

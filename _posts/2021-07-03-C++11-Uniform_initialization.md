@@ -2,7 +2,7 @@
 layout:     post
 title:      Uniform Initialization
 subtitle:   C++11 - 一致性初始化{}
-date:       2021-09-5
+date:       2021-07-3
 author:     Zhgaot
 header-img: img/C++/C++_cover.png
 catalog: true

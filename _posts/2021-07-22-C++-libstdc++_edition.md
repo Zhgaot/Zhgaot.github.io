@@ -2,7 +2,7 @@
 layout:     post
 title:      Linux下的libstdc++的版本问题
 subtitle:   Linux下无法链接到libstdc++最新版本的问题
-date:       2021-08-2
+date:       2021-7-22
 author:     Zhgaot
 header-img: img/C++/C++_cover.png
 catalog: true

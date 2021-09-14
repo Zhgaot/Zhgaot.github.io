@@ -2,7 +2,7 @@
 layout:     post
 title:      C++11线程库使用（四）
 subtitle:   互斥量概念与用法 & 死锁演示及解决
-date:       2021-07-4
+date:       2021-08-4
 author:     Zhgaot
 header-img: img/C++/C++_cover.png
 catalog: true

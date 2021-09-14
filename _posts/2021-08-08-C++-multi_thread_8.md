@@ -2,7 +2,7 @@
 layout:     post
 title:      C++11线程库使用（八）
 subtitle:   async & future & packaged_task & promise
-date:       2021-07-8
+date:       2021-08-8
 author:     Zhgaot
 header-img: img/C++/C++_cover.png
 catalog: true

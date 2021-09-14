@@ -2,7 +2,7 @@
 layout:     post
 title:      initializer_list
 subtitle:   C++11 - initializer_list
-date:       2021-09-5
+date:       2021-07-2
 author:     Zhgaot
 header-img: img/C++/C++_cover.png
 catalog: true

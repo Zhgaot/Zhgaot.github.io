@@ -7,7 +7,7 @@ author:     Zhgaot
 header-img: img/C++/C++_cover.png
 catalog: true
 tags:
-    - C++
+    - C++ 
     - C++11
     - multi-thread
 ---

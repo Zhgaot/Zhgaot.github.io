@@ -1,20 +1,21 @@
 ---
 layout:     post
 title:      undefined reference to `XXX'
-subtitle:   undefined reference to `XXX'问题分析与解决
+subtitle:   undefined reference to `XXX'问题记录与解决
 date:       2021-8-15
 author:     Zhgaot
 header-img: img/C++/C++_cover.png
 catalog: true
 tags:
     - C++
+    - Tencent-Internship
 ---
 
 > 本篇博客记录了我所遇到的关于undefined reference to `XXX'报错的工程原因以及解决思路，同时参考了一篇[参考文章](https://github.com/Captain1986/CaptainBlackboard)，在此文章中记录的原因在本博客中将不再进行实验与讲解
 
 ## 1 原因概述
 
-我们在Linux下用C/C++工作的时候，经常会遇到`undefined reference to `XXX'`的问题，直白地说就是在**链接**(从.cpp源代码到可执行的ELF文件，要经过预处理->编译->链接三个阶段，此时预处理和编译已经通过了)的时候，链接器找不到XXX这个函数的定义了。
+我们在Linux下用C/C++工作的时候，经常会遇到`undefined reference to 'XXX'`的问题，直白地说就是在**链接**(从.cpp源代码到可执行的ELF文件，要经过预处理->编译->链接三个阶段，此时预处理和编译已经通过了)的时候，链接器找不到XXX这个函数的定义了。
 
 我参考了这篇文章[👉"undefined reference to XXX"问题总结发现](https://github.com/Captain1986/CaptainBlackboard)，其中共总结了6点原因：
 
@@ -51,7 +52,7 @@ tags:
 1. 如果将函数的**实现**放在**头文件**中，那么每一个包含该头文件的cpp文件都将得到一份关于该函数的**定义**，那么链接器会报**函数重定义**错误。
 2. 如果将函数的**实现**放在**头文件**，并且标记为**inline** 那么每一个包含该头文件的cpp文件都将得到一份关于该函数的**定义**，并且链接器**不会报错**。
 3. 如果将函数的**实现**放在**cpp文件**中，并且**没有标记为inline**,那么该函数可以被连接到其他编译单元中。
-4. 如果将函数的**实现**放在**cpp文**件中，并且**标记为inline**, 那么该函数对其他编译单元不可见（类似static的效果），也就是其他cpp文件不能链接该函数库，也就是`undefined reference to `XXX'` 报错。
+4. 如果将函数的**实现**放在**cpp文**件中，并且**标记为inline**, 那么该函数对其他编译单元不可见（类似static的效果），也就是其他cpp文件不能链接该函数库，也就是`undefined reference to 'XXX'`报错。
 
 ## 3 库的树形链接问题
 
@@ -59,7 +60,7 @@ tags:
 
 #### 3.1.1 问题背景
 
-在腾讯实习时接手了一个图像编解码项目，最开始肯定要编译一下前辈之前所写的demo康康运行效果，此demo调用了前辈所写的图片解码接口（img_decode），但是出现了巨多的`undefined reference to `XXX'`报错。
+在腾讯实习时接手了一个图像编解码项目，最开始肯定要编译一下前辈之前所写的demo康康运行效果，此demo调用了前辈所写的图片解码接口（img_decode），但是出现了巨多的`undefined reference to 'XXX'`报错。
 
 #### 3.1.2 问题过程
 
@@ -82,7 +83,7 @@ INCLUDE_DIRECTORIES(
 
 1. 库文件链接
 
-一开始，我只链接了接口img_decode所生成的静态链接库libImageDecode.a，之后就出现了巨多的`undefined reference to `XXX'`报错；于是我找到demo原始makefile文件，**发现此demo仅将自己的.cpp文件链接为静态链接库，但其依赖的其他库文件它并未一同打包进静态库，因此我将此接口依赖的静态链接库也写入了CMakeLists.txt中（注：也链接了pthread）**：
+一开始，我只链接了接口img_decode所生成的静态链接库libImageDecode.a，之后就出现了巨多的`undefined reference to 'XXX'`报错；于是我找到demo原始makefile文件，**发现此demo仅将自己的.cpp文件链接为静态链接库，但其依赖的其他库文件它并未一同打包进静态库，因此我将此接口依赖的静态链接库也写入了CMakeLists.txt中（注：也链接了pthread）**：
 
 ```bash
 LINK_DIRECTORIES(
@@ -106,7 +107,7 @@ LINK_LIBRARIES([接口生成的静态库] [解码库1涉及的库] [解码库2
 
 #### 3.2.1 问题分析
 
-如上所述，`undefined reference to `XXX'`即表明在链接时找不到某个函数的实现文件。在本例中，可能出现两种错误导致报错：
+如上所述，`undefined reference to 'XXX'`即表明在链接时找不到某个函数的实现文件。在本例中，可能出现两种错误导致报错：
 
 1. **libImageDecode.a所依赖的库又链接了其他库，形成了树形依赖**，因此虽然我已参考demo的makefile链接了第二层库，但是原始demo依然编译不通过，因此说明可能依然是**链接的库不完全**导致报错；
 2. 当库产生了树形依赖时，存在库文件的链接顺序问题，即：**依赖其他库的库一定要放到被依赖库的前面**；
@@ -130,7 +131,7 @@ nm --defined-only -CA ./*.a | grep png_get_io_ptr  # 输出：./liblibpng.a:pn
 
 #### 4.1.1 问题背景
 
-在**“3 库的树形链接问题”**中，我在尝试解决一个demo的编译问题，但其实在我链接了所有依赖的库后，依然没有解决：依然报错`undefined reference to `XXX'`，如下图所示：
+在**“3 库的树形链接问题”**中，我在尝试解决一个demo的编译问题，但其实在我链接了所有依赖的库后，依然没有解决：依然报错`undefined reference to 'XXX'`，如下图所示：
 
 ![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++/undefined_reference/undefined_reference_3.png)
 
@@ -145,7 +146,7 @@ nm --defined-only -CA ./*.a | grep png_get_io_ptr  # 输出：./liblibpng.a:pn
 
 #### 4.2.1 原因排查一
 
-由报错提示可知，与上一篇一样，出现`undefined reference to `XXX'`，这应该依然是库的链接问题；于是上网搜索`operator delete`，发现其一般定义在**libstdc++.a静态链接库**中，那就直接全局搜索此链接库，由于我们使用的是拉取的环境，因此可能链接到的库文件如下红框内所示：
+由报错提示可知，与上一篇一样，出现`undefined reference to 'XXX'`，这应该依然是库的链接问题；于是上网搜索`operator delete`，发现其一般定义在**libstdc++.a静态链接库**中，那就直接全局搜索此链接库，由于我们使用的是拉取的环境，因此可能链接到的库文件如下红框内所示：
 
 ![](https://raw.githubusercontent.com/Zhgaot/Zhgaot.github.io/master/img/C++/undefined_reference/undefined_reference_4.png)
 

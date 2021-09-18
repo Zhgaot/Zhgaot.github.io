@@ -186,7 +186,8 @@ article {
 }
 blockquote {
   color: gray;
-  font-style: italic;
+  /* font-style: italic; */
+  font-style: normal;
   font-size: 0.95em;
   margin: 20px 0 20px;
 }

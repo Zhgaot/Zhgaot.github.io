@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      分布式K-V缓存系统设计
-subtitle:   实习项目：分布式K-V缓存系统项目详解
+subtitle:   实习合作项目：分布式K-V缓存系统项目详解
 date:       2021-9-13
 author:     Zhgaot
 header-img: img/Project/distributed_kv/cloud.png

@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      科研项目 —— 民航停机位分配
-subtitle:   科研项目 —— 动态禁忌搜索求解民航停机位分配问题
+title:      民航停机位分配
+subtitle:   科研项目：动态禁忌搜索求解民航停机位分配问题
 date:       2021-9-10
 author:     Zhgaot
 header-img: img/Project/gates_ass/airplane3.jpg

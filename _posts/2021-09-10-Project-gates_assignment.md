@@ -10,17 +10,23 @@ tags:
     - Project
 ---
 
-> 导语：本篇博客将分享求解民航停机位分配问题的一种方法
->
-> 问题：民航静态停机位分配问题
->
-> 算法：动态禁忌搜索算法
->
-> 语言：python
+> **[导语]:** 本篇博客将分享求解民航停机位分配问题的一种方法
 >
 > ------
 >
-> 源码：[GitHub](https://github.com/Zhgaot/Zhgaot-Zhgaot-Static_aircraft_gates-stands-_assignment_optimization_based_on_tabu_search_algorithm)
+> **[问题]:** 民航静态停机位分配问题
+>
+> ------
+>
+> **[算法]:** 动态禁忌搜索算法
+>
+> ------
+>
+> **[语言]:** python
+>
+> ------
+>
+> **[源码]:** [Zhgaot_GitHub](https://github.com/Zhgaot/Zhgaot-Zhgaot-Static_aircraft_gates-stands-_assignment_optimization_based_on_tabu_search_algorithm)
 
 ## 1 模型构建
 

@@ -24,6 +24,10 @@ tags:
 > ------
 >
 > **[项目源码]:** 由于公司的保密要求，以及我们使用的是内部开源的网络框架，因此无法将源码拷出，所以这篇文章将详细说明我们的设计与实现过程
+>
+> ------
+>
+> **[注意事项]:** **如果未使用VPN**，本篇的图片可能无法查看，可直接进入我的笔记[👉notion-分布式K-V缓存系统设计](https://amazing-brow-87c.notion.site/K-V-91244b838ebe4efd82aea134cf677dee)查看
 
 ## 1 分布式缓存系统设计概述
 
@@ -168,7 +172,7 @@ Cache-Server群组扩容分为两阶段：“扩容进行中”和“扩容完�
 
 在迁移过程方面：如上图所示，当Cache-Server群组需要扩容时，Master-Server将会收到新的Cache-Server发来的心跳包，表明有新的Cache-Server到来；Master-Server一方面保存`Old-HashSlot`，另一方面会重新分配一个`New-HashSlot`，再将`New-HashSlot`广播至每组Cache-Server；Cache-Server依照Master-Server提供的`New-HashSlot`进行数据迁移，当所有Cache-Server完成数据迁移后，Master-Server才将本地的`Old-HashSlot`删除，并以`New-HashSlot`作为替代。
 
-在代码实现方面：当Primary-Cache-Server(将会在“2.4 宕机与容灾”中讲到)收到Master-Server的`New-HashSlot`时，将**另开一个新线程，遍历内存中LRU的哈希表，根据`New-HashSlot`挨个比对每个Key是否依然属于本Primary-Cache-Server，如果某个Key不属于，则会将其假设为一条Client发送的SET请求发送至`New-HashSlot`中此Key对应的那个Primary-Cache-Server，并从本Primary-Cache-Server的LRU中删除此条数据**。
+在代码实现方面：当Primary-Cache-Server(将会在“2.4 宕机与容灾”中讲到)收到Master-Server的`New-HashSlot`时，将**另开一个新线程(使用线程的原因见2.3.2一节)，遍历内存中LRU的哈希表，根据`New-HashSlot`挨个比对每个Key是否依然属于本Primary-Cache-Server，如果某个Key不属于，则会将其假设为一条Client发送的SET请求发送至`New-HashSlot`中此Key对应的那个Primary-Cache-Server，并从本Primary-Cache-Server的LRU中删除此条数据**。
 
 对于缩容：与扩容相似，只不过在缩容前Master-Server将收到某个Primary-Cache-Server要缩容的请求，于是Master-Server将会重新分配哈希槽，系统进而开始进行一系列的缩容操作(广播、数据迁移等...)。
 
@@ -185,6 +189,8 @@ Cache-Server群组扩容分为两阶段：“扩容进行中”和“扩容完�
 
 - Client请求写入**未迁移**走的数据：Cache-Server_1将代替Client向此数据新的所属Cache-Server_2发送SET请求，这样Cache-Server_2中关于此数据的Value和顺序均被更新，得到Cache-Server_2的确认后返回结果给Client，最后**Cache-Server_1从本地的LRU中删除此数据**；
 - Client请求写入**已迁移**走的数据：Cache-Server_1将代替Client向此数据新的所属Cache-Server_2发送SET请求，得到Cache-Server_2的确认后返回结果给Client；
+
+这里需要呼应2.3.1一节来解释一点，即为什么使用开辟新线程来进行数据迁移：是因为这种方式方便访问共同的内存中的LRU(具体来说是LRU中的哈希表)，这是为了方便主线程在接到Client端的请求时判断Client请求操作的某个Key是否已经迁移完成，如果能在哈希表中找到说明未迁移，如果无法在哈希表中找到说明已迁移。
 
 #### 2.3.3 顺带一提
 
@@ -231,9 +237,11 @@ Replica-Cache-Server宕机时：Replica-Cache-Server将不再给Master-Server发
 
 数据恢复指的是：某个Cache-Server宕机后立刻重启，那么无论此Cache-Server之前是Primary还是Replica，当前它都将作为Replica-Cache-Server工作，那么当前的Primary-Cache-Server将对其进行数据恢复的操作。
 
-在本系统中，使用**全量复制**来实现数据恢复，即当Replica-Cache-Server重新上线后，Primary-Cache-Server需要`fork()`一个子进程（基于父子进程的**写时复制机制**，子进程暂时不会复制一份父进程的物理空间），子进程将依次倒序遍历内存中的LRU链表，并将每条数据通过SET请求发送至Replica-Cache-Server，完成全量备份。
+在本系统中，使用**全量复制**来实现数据恢复，即当Replica-Cache-Server重新上线后，Primary-Cache-Server需要`fork()`一个**子进程**（基于父子进程的**写时复制机制**，子进程暂时不会复制一份父进程的物理空间），子进程将依次倒序遍历内存中的LRU链表，并将每条数据通过SET请求发送至Replica-Cache-Server，完成全量备份。
 
 若在进行全量复制时，Client访问了Primary-Cache-Server，Primary-Cache-Server会在本地直接进行GET/SET请求并返回结果给Client而不会复制并转发Client的请求给Replica-Cache-Server；重要的是：Primary-Cache-Server会在内存中开辟一段**缓冲区**（基于写时复制，此时子进程才需要复制一份父进程的物理空间），记录下Client的GET/SET请求，等到全量复制完成后，再依次将缓冲区内的请求发送至Replica-Cache-Server以进行数据同步。
+
+恢复数据时，fork子进程而非开辟新线程的原因是：假如Client真的在数据恢复时访问Primary-Cache-Server，则此时Primary-Cache-Server的父进程与子进程之间才会分离物理空间，二者各自的工作将互不影响，而如果Client并未在数据恢复时访问Primary-Cache-Server，父子进程依然共享物理空间，也不会造成浪费。
 
 ## 3 不足与优化
 
